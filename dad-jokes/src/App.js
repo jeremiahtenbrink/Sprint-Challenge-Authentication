@@ -1,15 +1,18 @@
-import React, { Component } from "react";
+import React, { Component }  from "react";
 import "./App.css";
-import NavbarComponent      from "./components/nav/NavbarComponent";
-import NavComponent         from "./components/nav/NavComponent";
-import { Button }           from "reactstrap";
-import { Route }            from "react-router-dom";
-import Login                from "./views/login/Login";
+import NavbarComponent       from "./components/nav/NavbarComponent";
+import NavComponent          from "./components/nav/NavComponent";
+import RequiresAuth          from "./auth/requiresAuth";
+import { Button }            from "reactstrap";
+import { Route, withRouter } from "react-router-dom";
+import Login                 from "./views/login/Login";
+import Jokes                 from "./views/jokes/Jokes";
 
 class App extends Component {
     
     logout = () => {
-    
+        localStorage.removeItem( "auth-token" );
+        this.props.history.push( "/" );
     };
     
     render() {
@@ -25,11 +28,12 @@ class App extends Component {
                 </header>
                 <main>
                     <Route path={ "/" } exact component={ Login }/>
-                    <Route path={ "/jokes" }/>
+                    <Route path={ "/jokes" }
+                           component={ RequiresAuth( Jokes ) }/>
                 </main>
             </div>
         );
     }
 }
 
-export default App;
+export default withRouter( App );
